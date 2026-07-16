@@ -1,38 +1,70 @@
-import streamlit as st
+import { useState } from "react";
 
-st.set_page_config(page_title="カラー剤コスト比較アプリ")
+export default function App() {
+  const [a1g, setA1g] = useState(120);
+  const [a1price, setA1price] = useState(360);
+  const [a2g, setA2g] = useState(2000);
+  const [a2price, setA2price] = useState(1000);
+  const [ratio1, setRatio1] = useState(1);
+  const [ratio2, setRatio2] = useState(2);
 
-st.title("THAN vs 他カラーコスト比較ツール")
+  const unit1 = a1price / a1g;
+  const unit2 = a2price / a2g;
 
-col1, col2 = st.columns(2)
+  const mixed =
+    (unit1 * ratio1 + unit2 * ratio2) /
+    (ratio1 + ratio2);
 
-def get_inputs(title, col):
-    st.subheader(title)
-    g1 = col.number_input(f"{title}: 1剤容量(g)", value=120)
-    p1 = col.number_input(f"{title}: 1剤価格(円)", value=360)
-    g2 = col.number_input(f"{title}: 2剤容量(ml/g)", value=2000)
-    p2 = col.number_input(f"{title}: 2剤価格(円)", value=1000)
-    ratio = col.number_input(f"{title}: 混合比(1:x)", value=2)
-    
-    # 計算
-    u1 = p1 / g1
-    u2 = p2 / g2
-    mixed_price = (u1 * 1 + u2 * ratio) / (1 + ratio)
-    return mixed_price
+  return (
+    <div style={{padding:20}}>
+      <h2>カラー価格比較</h2>
 
-with col1:
-    price1 = get_inputs("THAN", col1)
-with col2:
-    price2 = get_inputs("比較対象", col2)
+      <p>1剤容量</p>
+      <input
+        type="number"
+        value={a1g}
+        onChange={(e)=>setA1g(Number(e.target.value))}
+      />
 
-st.divider()
-st.subheader("結果比較")
-st.write(f"THAN 混合時単価: **{price1:.2f} 円/g**")
-st.write(f"比較対象 混合時単価: **{price2:.2f} 円/g**")
+      <p>1剤価格</p>
+      <input
+        type="number"
+        value={a1price}
+        onChange={(e)=>setA1price(Number(e.target.value))}
+      />
 
-if price1 < price2:
-    st.success("THAN の方がお得です！")
-elif price2 < price1:
-    st.success("比較対象 の方がお得です！")
-else:
-    st.info("どちらも同じ単価です。")
+      <p>2剤容量</p>
+      <input
+        type="number"
+        value={a2g}
+        onChange={(e)=>setA2g(Number(e.target.value))}
+      />
+
+      <p>2剤価格</p>
+      <input
+        type="number"
+        value={a2price}
+        onChange={(e)=>setA2price(Number(e.target.value))}
+      />
+
+      <p>混合比</p>
+      <input
+        type="number"
+        value={ratio1}
+        onChange={(e)=>setRatio1(Number(e.target.value))}
+      />
+      :
+      <input
+        type="number"
+        value={ratio2}
+        onChange={(e)=>setRatio2(Number(e.target.value))}
+      />
+
+      <hr/>
+
+      <h3>1剤単価：{unit1.toFixed(2)} 円/g</h3>
+      <h3>2剤単価：{unit2.toFixed(2)} 円/g</h3>
+      <h2>混合後単価：{mixed.toFixed(2)} 円/g</h2>
+    </div>
+  );
+}
