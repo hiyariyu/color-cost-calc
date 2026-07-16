@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="カラー剤コスト比較アプリ")
 
-st.title("THAN vs 他カラー剤　コスト比較ツール")
+st.title("THANvs他カラー剤　コスト比較ツール")
 
 col1, col2 = st.columns(2)
 
